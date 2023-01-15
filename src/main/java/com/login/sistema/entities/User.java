@@ -8,14 +8,14 @@ import jakarta.persistence.*;
 @Table(name = "users")
 public class User {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID uid;
   private String email;
   private String password;
   private Boolean enable_boot;
 
-  @OneToOne()
-  @JoinColumn(name = "role_uid")
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "role_uid", referencedColumnName = "uid")
   public Role role;
 
   public User() {
