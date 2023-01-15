@@ -7,15 +7,13 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "roles")
 public class Role {
+
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID uid;
   private String name;
   private Integer type;
   private Boolean enable_boot;
-
-  public Role() {
-  }
 
   public Role(UUID uid, String name, Integer type, Boolean enable_boot) {
     this.uid = uid;
