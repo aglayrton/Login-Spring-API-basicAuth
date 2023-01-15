@@ -1,12 +1,19 @@
 package com.login.sistema.entities;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails{
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID uid;
@@ -45,6 +52,7 @@ public class User {
     this.email = email;
   }
 
+  @Override
   public String getPassword() {
     return password;
   }
@@ -67,6 +75,44 @@ public class User {
 
   public void setRole(Role role) {
     this.role = role;
+  }
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    //devo retornar uma lista de GrantedAuthority
+    List<GrantedAuthority> authorities = new ArrayList<>();//cria uma lista de GrantedAuthority
+    authorities.add(new SimpleGrantedAuthority(role.getName()));//add SimpleGrantedAuthority no GrantedAuthority
+    return authorities;
+  }
+
+  @Override
+  public String getUsername() {
+    // TODO Auto-generated method stub
+    return email;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    // TODO Auto-generated method stub
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    // TODO Auto-generated method stub
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    // TODO Auto-generated method stub
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    // TODO Auto-generated method stub
+    return true;
   }
 
 }
