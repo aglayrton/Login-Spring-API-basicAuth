@@ -22,6 +22,9 @@ public class Role {
     this.enable_boot = enable_boot;
   }
 
+  public Role() {
+  }
+
   public UUID getUid() {
     return uid;
   }
