@@ -1,25 +1,31 @@
 package com.login.sistema.entities;
 
+import com.login.sistema.dto.UserDto;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import jakarta.persistence.*;
-
 @Entity
 @Table(name = "users")
-public class User implements UserDetails{
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private UUID uid;
+public class User extends BaseEntity implements UserDetails {
+
   private String email;
   private String password;
-  private Boolean enable_boot;
+  private Boolean enableBoot;
+  @OneToOne
+  @JoinColumn(name = "uid")
+  private DataProfile dataProfile;
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "role_uid", referencedColumnName = "uid")
@@ -28,21 +34,20 @@ public class User implements UserDetails{
   public User() {
   }
 
-  public User(UUID uid, String email, String password, Boolean enable_boot, Role role) {
-    this.uid = uid;
+  public User(UUID uid, String email, String password, Boolean enableBoot, Role role) {
+    this.setUid(uid);
     this.email = email;
     this.password = password;
-    this.enable_boot = enable_boot;
+    this.enableBoot = enableBoot;
     this.role = role;
   }
 
-  public UUID getUid() {
-    return uid;
+  public User(UserDto userDto) {
+    this.email = userDto.getEmail();
+    this.password = userDto.getPassword();
+    this.enableBoot = userDto.getEnableBoot();
   }
 
-  public void setUid(UUID uid) {
-    this.uid = uid;
-  }
 
   public String getEmail() {
     return email;
@@ -61,12 +66,12 @@ public class User implements UserDetails{
     this.password = password;
   }
 
-  public Boolean getEnable_boot() {
-    return enable_boot;
+  public Boolean getEnableBoot() {
+    return enableBoot;
   }
 
-  public void setEnable_boot(Boolean enable_boot) {
-    this.enable_boot = enable_boot;
+  public void setEnableBoot(Boolean enableBoot) {
+    this.enableBoot = enableBoot;
   }
 
   public Role getRole() {
@@ -75,6 +80,14 @@ public class User implements UserDetails{
 
   public void setRole(Role role) {
     this.role = role;
+  }
+
+  public DataProfile getDataProfile() {
+    return dataProfile;
+  }
+
+  public void setDataProfile(DataProfile dataProfile) {
+    this.dataProfile = dataProfile;
   }
 
   @Override
